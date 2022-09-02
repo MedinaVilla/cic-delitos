@@ -1,25 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Navbar from './components/shared/Navbar';
+import Layout from './components/layout/Layout';
+import Maps from './pages/Maps';
+import Results from './pages/Results';
+import Statistics from './pages/Statistics';
 
 function App() {
+  const theme = createTheme({
+    typography: {
+      fontFamily: "'Kdam Thmor Pro', sans-serif",
+    },
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/mapas" element={<Maps />} />
+            <Route exact path="/resultados" element={<Results />} />
+            <Route exact path="/estadisticas" element={<Statistics />} />
+
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </ThemeProvider>
+
+  )
 }
 
 export default App;
