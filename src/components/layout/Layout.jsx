@@ -13,7 +13,6 @@ const usesStyles = makeStyles((theme) => {
             width: '100%',
             // height: '100%',
             flex:1,
-            border:"1px solid red",
             boxSizing:"border-box",
             // margin: "50px",
             // margin: "5vh",

@@ -10,8 +10,18 @@ const icons = {};
 
 const fetchIcon = (count, size) => {
     if (!icons[count]) {
+      console.log()
+        let classMarker = "";
+        if(count < 10){
+            classMarker = "green-marker"
+        } else if(count < 40){
+            classMarker = "warning-marker";
+        } else if(count > 40) {
+            classMarker = "danger-marker"
+        }
+
         icons[count] = divIcon({
-            html: `<div class='cluster-marker' style="width: ${size}px; height: ${size}px;">
+            html: `<div class='cluster-marker ${classMarker}' style="width: ${size}px; height: ${size}px;">
         ${count}
       </div>`,
         });

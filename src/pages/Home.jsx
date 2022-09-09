@@ -6,7 +6,6 @@ import { MAPBOX_KEY } from "./../config/constants";
 import axios from "axios";
 import ShowMarkersCluster from "./../components/cluster/ShowMarkersCluster";
 import styles from "./../styles/Home.module.css";
-import { useMap } from 'react-leaflet';
 
 import { Alert, CircularProgress } from '@mui/material';
 

@@ -4,8 +4,8 @@
 }
 
 .cluster-marker {
-    color: #fff;
-    background: #1978c8;
+    color: black;;
+    /* background: #1978c8; */
     border-radius: 50%;
     padding: 10px;
     width: 10px;
@@ -13,4 +13,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.green-marker{
+    background-color: rgba(147, 230, 22, 0.881);
+}
+.warning-marker{
+    background-color: rgba(243, 243, 37, 0.811);
+}
+.danger-marker{
+    background-color: rgba(255, 166, 0, 0.946);
 }

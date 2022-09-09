@@ -1,0 +1,13 @@
+.wrapper{
+    display: flex;
+    /* flex-flow: row; */
+    align-items: center;
+}
+
+.mapContainer{
+   height: 80vh;
+   width: 40vw;
+   flex-grow:1;
+   transition: flex-grow 1000ms linear;
+
+}
