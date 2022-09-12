@@ -1,11 +1,34 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import Graph from "./../assets/graph.PNG";
-import { Card } from '@material-ui/core';
-import { CardContent, Typography } from '@mui/material';
+import { AppBar, Card, useScrollTrigger } from '@material-ui/core';
+import { CardContent, Container, CssBaseline, Fade, Toolbar, Typography } from '@mui/material';
 import AsociationMap from '../components/cluster/asociationMap/AsociationMap';
 
-const Results = () => {
+import dataCSVG from "./../data/Delitos_Genero_Preproceso.json";
+import dataCSVV from "./../data/Delitos_Violentos_Preprocesado.json";
+import { Box } from '@mui/system';
+
+const Results = (props) => {
+    const { window } = props;
+    const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector(
+            '#back-to-top-anchor',
+        );
+
+        if (anchor) {
+            anchor.scrollIntoView({
+                block: 'center',
+            });
+        }
+    };
+
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
+
     return (
         <div style={{ padding: "28px", }}>
             <Grid container alignItems="center" >
@@ -13,20 +36,40 @@ const Results = () => {
                     <img style={{ width: "100%", maxWidth: "600px" }} src={Graph} alt="graph" />
                 </Grid>
                 <Grid item xs={12} md={5} lg={4}>
-                    <Card>
-                        <CardContent>
-                            <Typography sx={{ fontSize: 18 }} color="text.primary" gutterBottom>
+                    <Container>
+                        <Box style={{ backgroundColor: "#800040", color: "white", padding: "18px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} >
+                            <Typography sx={{ fontSize: 18 }} color="white" >
                                 Clasificación de los delitos
                             </Typography>
-                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                        </Box>
+                        <Box style={{ padding: "18px", border: "1px solid #800040" }}>
+                            Cras mattis consectetur purus sit amet fermentum.
+                            Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
+                        </Box>
+                    </Container>
                 </Grid>
             </Grid>
-            <br/>
-            <AsociationMap/>
+            <br />
+            <div >
+                <Typography sx={{ fontSize: 24 }} color="black" >
+                    Delitos de Género
+                </Typography>
+                <div style={{ borderBottom: "1.5px solid #800040", backgroundColor: "#800040" }} />
+            </div>
+            <br />
+
+            <AsociationMap dataMarkers={dataCSVG} type="Genero" />
+            <br />
+            <div >
+                <Typography sx={{ fontSize: 24 }} color="black" >
+                    Delitos Violentos
+                </Typography>
+                <div style={{ borderBottom: "1.5px solid #800040", backgroundColor: "#800040" }} />
+            </div>
+            <br />
+            <AsociationMap dataMarkers={dataCSVV} type="Violentos" />
         </div>
     );
 }

@@ -2,18 +2,20 @@
     display: flex;
     /* flex-flow: row; */
     align-items: center;
+    padding: 18px;
 }
 
 .mapContainer{
    height: 80vh;
    width: 40vw;
    flex-grow:1;
-   transition: flex-grow 1000ms linear;
+   transition: flex-grow 2000ms linear;
 
 }
 
 .animated{
     flex-grow: 1;
+    width: 40vw;
     /* max-width: 40%; */
 }
 

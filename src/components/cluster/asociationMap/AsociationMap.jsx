@@ -1,52 +1,112 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-import ShowMarkersCluster from '../ShowMarkersCluster';
-import axios from "axios";
 import styles from "./../../../styles/AsociationMap.module.css";
-import { Alert, Card, CardContent, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Typography } from '@mui/material';
 
 import { MAPBOX_KEY } from "./../../../config/constants";
+import { iconMarker } from '../MarkerIcon';
+
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
+require("leaflet.markercluster/dist/MarkerCluster.css");
+require("leaflet.markercluster/dist/MarkerCluster.Default.css");
 
 const mapboxUriTileLayer = "https://api.mapbox.com/styles/v1/medinavilla/cl6v5mk8w000t14mtzhgb5kbd/tiles/256/{z}/{x}/{y}@2x?access_token=" + MAPBOX_KEY
 
-const AsociationMap = () => {
+const AsociationMap = ({ dataMarkers = [] }) => {
     const mapRef = useRef(null);
-    const [zoom] = useState(5);
-    const [data, setData] = useState([])
+    const [zoom] = useState(7);
+    const [data, setData] = useState(dataMarkers)
 
     const [markerSelected, setMarkerSelected] = useState();
 
     const [loading, setLoading] = useState(true);
     const [loadingMap, setLoadingMap] = useState(true);
 
+    const [transitionOn, setTransitionOn] = useState(false);
+
+    const [showAside, setShowAside] = useState(true);
+
     const showContentMarkerAside = async (coords) => {
-        setMarkerSelected(coords);
-        mapRef.current.flyTo(coords, 18)
+        if (showAside) { // Si ya mostrado los delitos, no hacer ninguna transicion
+            setMarkerSelected(coords);
+            mapRef.current.flyTo(coords, 18)
+        } else {
+            setShowAside(true);
+            setMarkerSelected(coords);
+            setTransitionOn(true);
+        }
     }
 
     useEffect(() => {
-        // DATA fetch
-        axios.get("https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2019-10").then((res) => {
-            setData(res.data);
-            setLoading(false);
-        })
+        setLoading(false);
     }, [])
+
+    // useEffect(() => {
+    //     if (transitionOn) {
+    //         setInterval(() => {
+    //             mapRef.current.invalidateSize();
+    //         }, 10);
+    //     }
+    // }, [transitionOn])
+
+
+    const points = dataMarkers.map((data, id) => {
+        if (!isNaN(data.longitud) && !isNaN(data.latitud)) {
+            return ({
+                type: "Feature",
+                properties: { cluster: false, crimeId: id, category: data.Delito },
+                geometry: {
+                    type: "Point",
+                    coordinates: [
+                        parseFloat(data.longitud),
+                        parseFloat(data.latitud),
+                    ],
+                },
+            })
+        } else return {}
+    });
+
+    const renderCluster = (map) => {
+        const data = {
+            type: "FeatureCollection",
+            features: points,
+        }
+        const lightData = L.geoJSON(data, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, { icon: iconMarker }); 
+            },
+
+        });
+
+        const markers = L.markerClusterGroup({
+            maxClusterRadius: 120,
+        }).addLayer(lightData);
+        map.target._layersMaxZoom = 16;
+        map.target.addLayer(markers);
+
+        markers.on('click', function (a) {
+            showContentMarkerAside(a.latlng);
+        });
+
+        setLoadingMap(false);
+    }
+
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.mapContainer}>
                 <MapContainer
-                    center={[52.6376, -1.135171]}
+                    center={[19.432608, -99.133209]}
                     zoom={zoom}
                     ref={mapRef}
                     style={{ height: '100%', width: "100%" }}
-                    whenReady={() => { setLoadingMap(false) }}
+                    whenReady={(map) => { renderCluster(map) }}
                 >
                     <TileLayer
                         url={mapboxUriTileLayer}
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    <ShowMarkersCluster onClickMarker={showContentMarkerAside} data={data} />
                 </MapContainer>
                 {
                     (loadingMap || loading) && <div className={styles.circularProgress}>
@@ -56,18 +116,21 @@ const AsociationMap = () => {
             </div>
             <div>
                 {
-                    markerSelected && <div >
+                    <div style={{ marginLeft: "24px" }}>
                         <div className={styles.container}>
-                            <Card style={{maxWidth:"40vw"}}>
-                                <CardContent>
-                                    <Typography sx={{ fontSize: 18 }} color="text.primary" gutterBottom>
-                                        Clasificación de los delitos
+                            <Container style={{ maxWidth: "40vw" }}>
+                                <Box style={{ backgroundColor: "#0E8DD4", color: "white", padding: "18px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} >
+                                    <Typography sx={{ fontSize: 18 }} color="white" >
+                                        Reglas de Asociación
                                     </Typography>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                                </Box>
+                                <Box style={{ padding: "18px", border: "1px solid #E7E7E7" }}>
+                                    Cras mattis consectetur purus sit amet fermentum.
+                                    Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+                                    Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                                    Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
+                                </Box>
+                            </Container>
                         </div>
                     </div>
                 }
