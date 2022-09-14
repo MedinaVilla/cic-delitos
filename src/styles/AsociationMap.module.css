@@ -1,7 +1,13 @@
 .wrapper{
     display: flex;
-    /* flex-flow: row; */
     align-items: center;
+    /* visibility: hidden; */
+    
+}
+.hidden{
+    /* visibility: hidden; */
+    display: none;
+    cursor: pointer!important;
 }
 
 .mapContainer{
@@ -9,5 +15,14 @@
    width: 50vw;
    flex-grow:1;
    transition: flex-grow 1000ms linear;
+}
 
+.circularProgress{
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+    height: 400px;
+    /* bottom: -250px; */
 }

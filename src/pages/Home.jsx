@@ -24,23 +24,34 @@ const Home = () => {
     const [markerSelected, setMarkerSelected] = useState();
     const [transitionOn, setTransitionOn] = useState(false);
 
-    const [loadingMap, setLoadingMap] = useState(true);
+    const [clusterMarkers, setClusterMarkers] = useState();
+    const [loading, setLoading] = useState(true);
 
-    const showContentMarkerAside = async (coords) => {
+ 
+    const showContentMarkerAside = async (marker) => {
+        console.log(marker);
+        console.log(showAside)
+        marker.layer.feature.properties.crime.latlng = marker.latlng;
+
         if (showAside) { // Si ya mostrado los delitos, no hacer ninguna transicion
-            setMarkerSelected(coords);
-            mapRef.current.flyTo(coords, 18)
+            setMarkerSelected(marker.layer.feature.properties.crime);
+            mapRef.current.flyTo(marker.latlng, 18)
         } else {
-            setShowAside(true);
-            setMarkerSelected(coords);
+            // setShowAside(true);
+            mapRef.current.flyTo(marker.latlng, 18)
+            setMarkerSelected(marker.layer.feature.properties.crime);
             setTransitionOn(true);
         }
     }
 
     useEffect(() => {
         if (transitionOn) {
-            setInterval(() => {
-                mapRef.current.invalidateSize();
+            const interval = setInterval(() => {
+                try{
+                    mapRef.current.invalidateSize();
+                } catch{
+                    clearInterval(interval);
+                }
             }, 10);
         }
     }, [transitionOn])
@@ -50,7 +61,7 @@ const Home = () => {
         if (!isNaN(data.longitud) && !isNaN(data.latitud)) {
             return ({
                 type: "Feature",
-                properties: { cluster: false, crimeId: id, category: data.Delito },
+                properties: { cluster: false, crime: data },
                 geometry: {
                     type: "Point",
                     coordinates: [
@@ -62,34 +73,54 @@ const Home = () => {
         } else return {}
     });
 
+
     const renderCluster = (map) => {
-        const data = {
-            type: "FeatureCollection",
-            features: points,
-        }
-        const lightData = L.geoJSON(data, {
-            pointToLayer: function (feature, latlng) {
-                return L.marker(latlng, { icon: iconMarker });
-            },
+        setTimeout(
+            () => {
+                const data = {
+                    type: "FeatureCollection",
+                    features: points,
+                }
+                const lightData = L.geoJSON(data, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, { icon: iconMarker });
+                    },
 
-        });
+                });
+                const markers = L.markerClusterGroup({
+                    maxClusterRadius: 100,
+                    disableClusteringAtZoom: 18,
+                    spiderfyOnMaxZoom: false,
+                    showCoverageOnHover: false, 
+                }).addLayer(lightData);
 
-        const markers = L.markerClusterGroup({
-            maxClusterRadius: 120,
-        }).addLayer(lightData);
-        map.target._layersMaxZoom = 16;
-        map.target.addLayer(markers);
+                markers.on('click', function (marker) {
+                    showContentMarkerAside(marker);
+                });
 
-        markers.on('click', function (a) {
-            showContentMarkerAside(a.latlng);
-        });
-
-        setLoadingMap(false);
+                setClusterMarkers(markers);
+            }, 500
+        );
     }
+
+
+    useEffect(() => {
+        if (clusterMarkers && mapRef) {
+            mapRef.current._layersMaxZoom = 18;
+            mapRef.current.addLayer(clusterMarkers);
+
+            setLoading(false);
+            setTimeout(() => {
+                mapRef.current.invalidateSize();
+            }, 200);
+        }
+    }, [clusterMarkers, mapRef])
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.mapContainer}>
                 <MapContainer
+                id="mymap"
                     center={[19.432608, -99.133209]}
                     zoom={zoom}
                     ref={mapRef}
@@ -103,21 +134,22 @@ const Home = () => {
                     />
                 </MapContainer>
                 {
-                    (loadingMap) && <div className={styles.circularProgress}>
+                    (loading) && <div className={styles.circularProgress}>
                         <CircularProgress color="error" />
                     </div>
                 }
             </div>
             <div className={showAside ? styles.animated : ""} style={{ transition: "flex-grow 200ms linear ", maxWidth: "35vw", alignContent: "center" }} onTransitionEnd={() => {
                 setTransitionOn(false);
-                mapRef.current.flyTo(markerSelected, 18)
+                // mapRef.current.flyTo(markerSelected.latlng, 18)
             }
             }>
                 {
                     markerSelected && <div>
                         <div className={styles.container}>
                             <Alert severity="error" icon={false}>
-                                El total de delitos cometidos cerca de esta zona es: {markerSelected.toString()}
+                                El total de delitos cometidos cerca de esta zona es: 
+                                IdCarpeta: {markerSelected? markerSelected.idCarpeta:""}
                             </Alert>
                         </div>
                     </div>

@@ -1,8 +1,7 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import Graph from "./../assets/graph.PNG";
-import { AppBar, Card, useScrollTrigger } from '@material-ui/core';
-import { CardContent, Container, CssBaseline, Fade, Toolbar, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import AsociationMap from '../components/cluster/asociationMap/AsociationMap';
 
 import dataCSVG from "./../data/Delitos_Genero_Preproceso.json";
@@ -10,24 +9,6 @@ import dataCSVV from "./../data/Delitos_Violentos_Preprocesado.json";
 import { Box } from '@mui/system';
 
 const Results = (props) => {
-    const { window } = props;
-    const handleClick = (event) => {
-        const anchor = (event.target.ownerDocument || document).querySelector(
-            '#back-to-top-anchor',
-        );
-
-        if (anchor) {
-            anchor.scrollIntoView({
-                block: 'center',
-            });
-        }
-    };
-
-    const trigger = useScrollTrigger({
-        target: window ? window() : undefined,
-        disableHysteresis: true,
-        threshold: 100,
-    });
 
     return (
         <div style={{ padding: "28px", }}>
@@ -69,7 +50,7 @@ const Results = (props) => {
                 <div style={{ borderBottom: "1.5px solid #800040", backgroundColor: "#800040" }} />
             </div>
             <br />
-            <AsociationMap dataMarkers={dataCSVV} type="Violentos" />
+            {/* <AsociationMap dataMarkers={dataCSVV} type="Violentos" /> */}
         </div>
     );
 }
