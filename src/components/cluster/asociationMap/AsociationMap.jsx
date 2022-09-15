@@ -33,7 +33,6 @@ const AsociationMap = ({ dataMarkers = [] }) => {
             mapRef.current.flyTo(marker.latlng, 18)
         } else {
             setShowAside(true);
-            console.log(marker)
             setMarkerSelected(marker.layer.feature.properties.crime);
             setTransitionOn(true);
         }
