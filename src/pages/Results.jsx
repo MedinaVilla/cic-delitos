@@ -5,10 +5,10 @@ import { Container, Typography } from '@mui/material';
 import AsociationMap from '../components/cluster/asociationMap/AsociationMap';
 
 import dataCSVG from "./../data/Delitos_Genero_Preproceso.json";
-import dataCSVV from "./../data/Delitos_Violentos_Preprocesado.json";
+import dataCSVV from "./../data/Delitos_Violentos_Preproceso.json";
 import { Box } from '@mui/system';
 
-const Results = (props) => {
+const Results = () => {
 
     return (
         <div style={{ padding: "28px", }}>

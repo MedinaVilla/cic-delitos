@@ -18,7 +18,7 @@ const mapboxUriTileLayer = "https://api.mapbox.com/styles/v1/medinavilla/cl6v5mk
 
 const Home = () => {
     const mapRef = useRef(null);
-    const [zoom] = useState(7);
+    const [zoom] = useState(11);
 
     const [showAside, setShowAside] = useState(false);
     const [markerSelected, setMarkerSelected] = useState();
@@ -29,10 +29,7 @@ const Home = () => {
 
 
     const showContentMarkerAside = async (marker) => {
-        console.log(marker);
-        console.log(showAside)
         marker.layer.feature.properties.crime.latlng = marker.latlng;
-
         if (showAside) { // Si ya mostrado los delitos, no hacer ninguna transicion
             setMarkerSelected(marker.layer.feature.properties.crime);
             mapRef.current.flyTo(marker.latlng, 18)

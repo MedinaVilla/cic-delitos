@@ -15,7 +15,7 @@ const mapboxUriTileLayer = "https://api.mapbox.com/styles/v1/medinavilla/cl6v5mk
 
 const AsociationMap = ({ dataMarkers = [] }) => {
     const mapRef = useRef(null);
-    const [zoom] = useState(7);
+    const [zoom] = useState(11);
 
     const [markerSelected, setMarkerSelected] = useState();
 
