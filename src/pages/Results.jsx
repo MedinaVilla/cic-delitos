@@ -50,7 +50,7 @@ const Results = (props) => {
                 <div style={{ borderBottom: "1.5px solid #800040", backgroundColor: "#800040" }} />
             </div>
             <br />
-            {/* <AsociationMap dataMarkers={dataCSVV} type="Violentos" /> */}
+            <AsociationMap dataMarkers={dataCSVV} type="Violentos" />
         </div>
     );
 }

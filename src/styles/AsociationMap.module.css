@@ -1,28 +1,61 @@
-.wrapper{
-    display: flex;
-    align-items: center;
-    /* visibility: hidden; */
+
+@media screen and (min-width: 0px) {
+    .wrapper{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* visibility: hidden; */
+        
+    }
+    .hidden{
+        /* visibility: hidden; */
+        display: none;
+        cursor: pointer!important;
+    }
     
-}
-.hidden{
-    /* visibility: hidden; */
-    display: none;
-    cursor: pointer!important;
+    .mapContainer{
+       height: 80vh;
+       width: 100%;
+       flex-grow:1;
+       transition: flex-grow 1000ms linear;
+    }
+    
+    .circularProgress{
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* text-align: center; */
+        height: 400px;
+        /* bottom: -250px; */
+    }
+    
+    .aside{
+        width: 50vw;
+        /* padding: 200px; */
+        /* background-color: red; */
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
 }
 
-.mapContainer{
-   height: 80vh;
-   width: 50vw;
-   flex-grow:1;
-   transition: flex-grow 1000ms linear;
+@media screen and (min-width: 760px) {
+
+    .wrapper{
+        display: flex;
+        flex-direction: row;
+        /* visibility: hidden; */
+        
+    }
+
+    .aside{
+        /* margin-left: 24px; */
+        width: 40vw;
+    }
 }
 
-.circularProgress{
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* text-align: center; */
-    height: 400px;
-    /* bottom: -250px; */
+@media screen and (min-width: 960px) {}
+
+@media screen and (min-width: 1320px) {
+ 
 }

@@ -5,7 +5,7 @@ import { MAPBOX_KEY } from "./../config/constants";
 
 import styles from "./../styles/Home.module.css";
 import { Alert, CircularProgress } from '@mui/material';
-import dataCSV from "./../data/Delitos_Violentos_Preprocesado.json";
+import dataCSV from "./../data/Delitos_Genero_Preproceso.json";
 
 import { iconMarker } from '../components/cluster/MarkerIcon';
 
@@ -27,7 +27,7 @@ const Home = () => {
     const [clusterMarkers, setClusterMarkers] = useState();
     const [loading, setLoading] = useState(true);
 
- 
+
     const showContentMarkerAside = async (marker) => {
         console.log(marker);
         console.log(showAside)
@@ -47,9 +47,9 @@ const Home = () => {
     useEffect(() => {
         if (transitionOn) {
             const interval = setInterval(() => {
-                try{
+                try {
                     mapRef.current.invalidateSize();
-                } catch{
+                } catch {
                     clearInterval(interval);
                 }
             }, 10);
@@ -91,7 +91,7 @@ const Home = () => {
                     maxClusterRadius: 100,
                     disableClusteringAtZoom: 18,
                     spiderfyOnMaxZoom: false,
-                    showCoverageOnHover: false, 
+                    showCoverageOnHover: false,
                 }).addLayer(lightData);
 
                 markers.on('click', function (marker) {
@@ -120,7 +120,7 @@ const Home = () => {
         <div className={styles.wrapper}>
             <div className={styles.mapContainer}>
                 <MapContainer
-                id="mymap"
+                    id="mymap"
                     center={[19.432608, -99.133209]}
                     zoom={zoom}
                     ref={mapRef}
@@ -139,17 +139,18 @@ const Home = () => {
                     </div>
                 }
             </div>
-            <div className={showAside ? styles.animated : ""} style={{ transition: "flex-grow 200ms linear ", maxWidth: "35vw", alignContent: "center" }} onTransitionEnd={() => {
-                setTransitionOn(false);
-                // mapRef.current.flyTo(markerSelected.latlng, 18)
-            }
-            }>
+            <div className={[showAside ? styles.animated : "", styles.aside]} 
+                onTransitionEnd={() => {
+                    setTransitionOn(false);
+                    // mapRef.current.flyTo(markerSelected.latlng, 18)
+                }
+                }>
                 {
                     markerSelected && <div>
                         <div className={styles.container}>
                             <Alert severity="error" icon={false}>
-                                El total de delitos cometidos cerca de esta zona es: 
-                                IdCarpeta: {markerSelected? markerSelected.idCarpeta:""}
+                                El total de delitos cometidos cerca de esta zona es:
+                                IdCarpeta: {markerSelected ? markerSelected.idCarpeta : ""}
                             </Alert>
                         </div>
                     </div>

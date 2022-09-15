@@ -107,7 +107,7 @@ const AsociationMap = ({ dataMarkers = [] }) => {
                         center={[19.432608, -99.133209]}
                         zoom={zoom}
                         ref={mapRef}
-                        style={{ height: '100%', width: "50vw" }}
+                        style={{ height: '100%', width: "100%" }}
                         whenReady={(map) => { renderCluster(map) }}
                     >
                         <TileLayer
@@ -119,8 +119,8 @@ const AsociationMap = ({ dataMarkers = [] }) => {
 
                 {
                     <div style={{ marginLeft: "24px" }}>
-                        <div className={styles.container}>
-                            <Container style={{ maxWidth: "40vw" }}>
+                        <div className={styles.aside}>
+                            <Container >
                                 <Box style={{ backgroundColor: "#0E8DD4", color: "white", padding: "18px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} >
                                     <Typography sx={{ fontSize: 18 }} color="white" >
                                         Reglas de Asociación  {markerSelected? markerSelected.idCarpeta:""}
