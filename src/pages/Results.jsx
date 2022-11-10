@@ -88,7 +88,7 @@ const Results = () => {
             </div>
             <br />
 
-            <AsociationMap dataMarkers={dataCSVG} type="Genero" />
+            <AsociationMap markerType="delitos_genero" type="Genero" />
             <br />
             <div >
                 <Typography sx={{ fontSize: 24 }} color="black" >
@@ -97,7 +97,7 @@ const Results = () => {
                 <div style={{ borderBottom: "1.5px solid #800040", backgroundColor: "#800040" }} />
             </div>
             <br />
-            <AsociationMap dataMarkers={dataCSVV} type="Violentos" />
+            <AsociationMap markerType="delitos_violentos" type="Violentos" />
         </div>
     );
 }

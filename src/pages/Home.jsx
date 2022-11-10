@@ -11,6 +11,8 @@ import { iconMarker } from '../components/cluster/MarkerIcon';
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import axios from "axios";
+
 require("leaflet.markercluster/dist/MarkerCluster.css");
 require("leaflet.markercluster/dist/MarkerCluster.Default.css");
 
@@ -21,26 +23,32 @@ const Home = () => {
     const [zoom] = useState(11);
 
     const [showAside, setShowAside] = useState(false);
+    const [markers, setMarkers] = useState([]);
     const [markerSelected, setMarkerSelected] = useState();
     const [transitionOn, setTransitionOn] = useState(false);
 
-    const [clusterMarkers, setClusterMarkers] = useState();
     const [loading, setLoading] = useState(true);
+    const [loadingData, setLoadingData] = useState(true);
 
+    /* Obrenemos los delitos de genero de nuestra API*/
+    useEffect(() => {
+        async function fetchData() {
+            axios.get("http://localhost:8081/delitos_genero").then((response) => {
+                if (response.data) {
+                    setMarkers(response.data)
+                    setLoadingData(false)
+                }
 
-    const showContentMarkerAside = async (marker) => {
-        marker.layer.feature.properties.crime.latlng = marker.latlng;
-        if (showAside) { // Si ya mostrado los delitos, no hacer ninguna transicion
-            setMarkerSelected(marker.layer.feature.properties.crime);
-            mapRef.current.flyTo(marker.latlng, 18)
-        } else {
-            // setShowAside(true);
-            mapRef.current.flyTo(marker.latlng, 18)
-            setMarkerSelected(marker.layer.feature.properties.crime);
-            setTransitionOn(true);
+            }).catch((error) => {
+                alert(error.message);
+                setLoadingData(false)
+            })
         }
-    }
+        fetchData();
+    }, [])
 
+
+    /* Listeners que siempre estara pendiente del cualquier cambio del tamaño del mapa para hacer un RESIZE*/
     useEffect(() => {
         if (transitionOn) {
             const interval = setInterval(() => {
@@ -53,12 +61,20 @@ const Home = () => {
         }
     }, [transitionOn])
 
+    useEffect(() => {
+        if (mapRef.current) {
+            setTimeout(() => {
+                mapRef.current.invalidateSize();
+            }, 200);
+        }
+    }, [mapRef])
 
-    const points = dataCSV.map((data, id) => {
+    /* Convertimos los marcadores en un formato legible para el mapa*/
+    const points = markers.map((data, id) => {
         if (!isNaN(data.longitud) && !isNaN(data.latitud)) {
             return ({
                 type: "Feature",
-                properties: { cluster: false, crime: data },
+                properties: { cluster: false, data: data },
                 geometry: {
                     type: "Point",
                     coordinates: [
@@ -71,72 +87,78 @@ const Home = () => {
     });
 
 
+
     const renderCluster = (map) => {
         setTimeout(
             () => {
-                const data = {
-                    type: "FeatureCollection",
-                    features: points,
-                }
-                const lightData = L.geoJSON(data, {
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng, { icon: iconMarker });
-                    },
-
-                });
                 const markers = L.markerClusterGroup({
                     maxClusterRadius: 100,
                     disableClusteringAtZoom: 18,
                     spiderfyOnMaxZoom: false,
                     showCoverageOnHover: false,
-                }).addLayer(lightData);
+                    chunkedLoading: true
+                })
+
+                points.map((point) => {
+                    let marker = L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], { icon: iconMarker })
+                    marker.data = point.properties.data
+                    marker.addTo(markers);
+                })
+
 
                 markers.on('click', function (marker) {
                     showContentMarkerAside(marker);
                 });
 
-                setClusterMarkers(markers);
+                markers.addTo(map.target);
+
+                mapRef.current._layersMaxZoom = 18;
+                setLoading(false);
             }, 500
         );
     }
 
-
-    useEffect(() => {
-        if (clusterMarkers && mapRef) {
-            mapRef.current._layersMaxZoom = 18;
-            mapRef.current.addLayer(clusterMarkers);
-
-            setLoading(false);
-            setTimeout(() => {
-                mapRef.current.invalidateSize();
-            }, 200);
+    const showContentMarkerAside = async (marker) => {
+        marker.sourceTarget.latlng = marker.latlng;
+        if (showAside) { // Si ya estan mostrados los delitos, no hacer ninguna transicion
+            setMarkerSelected(marker.sourceTarget.data);
+            mapRef.current.flyTo(marker.latlng, 18)
+        } else {
+            // setShowAside(true);
+            mapRef.current.flyTo(marker.latlng, 18)
+            setMarkerSelected(marker.sourceTarget.data);
+            setTransitionOn(true);
         }
-    }, [clusterMarkers, mapRef])
+    }
+
+
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.mapContainer}>
-                <MapContainer
+                {!loadingData? <MapContainer
+                    preferCanvas={true}
                     id="mymap"
                     center={[19.432608, -99.133209]}
                     zoom={zoom}
                     ref={mapRef}
                     style={{ height: '100%', width: "100%" }}
-                    whenReady={(map) => { renderCluster(map); }
-                    }
+                    whenReady={(map) => {
+                        renderCluster(map);
+                    }}
                 >
                     <TileLayer
                         url={mapboxUriTileLayer}
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                </MapContainer>
+                </MapContainer> : ""}
                 {
                     (loading) && <div className={styles.circularProgress}>
                         <CircularProgress color="error" />
                     </div>
                 }
             </div>
-            <div className={[showAside ? styles.animated : "", styles.aside]} 
+            <div className={[showAside ? styles.animated : "", styles.aside]}
                 onTransitionEnd={() => {
                     setTransitionOn(false);
                     // mapRef.current.flyTo(markerSelected.latlng, 18)
@@ -146,8 +168,9 @@ const Home = () => {
                     markerSelected && <div>
                         <div className={styles.container}>
                             <Alert severity="error" icon={false}>
-                                El total de delitos cometidos cerca de esta zona es:
-                                IdCarpeta: {markerSelected ? markerSelected.idCarpeta : ""}
+                                Delito: <strong>{markerSelected.delito}</strong> <br />
+                                Edad: <strong>{markerSelected.edad}</strong><br />
+                                Fecha/Hora hecho: <strong>{markerSelected.fechaHecho} {markerSelected.horaHecho}</strong><br />
                             </Alert>
                         </div>
                     </div>
