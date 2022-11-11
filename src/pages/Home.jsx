@@ -5,7 +5,7 @@ import { MAPBOX_KEY } from "./../config/constants";
 
 import styles from "./../styles/Home.module.css";
 import { Alert, CircularProgress } from '@mui/material';
-import dataCSV from "./../data/Delitos_Genero_Preproceso.json";
+// import dataCSV from "./../data/Delitos_Genero_Preproceso.json";
 
 import { iconMarker } from '../components/cluster/MarkerIcon';
 
@@ -131,8 +131,6 @@ const Home = () => {
         }
     }
 
-
-
     return (
         <div className={styles.wrapper}>
             <div className={styles.mapContainer}>
@@ -170,7 +168,7 @@ const Home = () => {
                             <Alert severity="error" icon={false}>
                                 Delito: <strong>{markerSelected.delito}</strong> <br />
                                 Edad: <strong>{markerSelected.edad}</strong><br />
-                                Fecha/Hora hecho: <strong>{markerSelected.fechaHecho} {markerSelected.horaHecho}</strong><br />
+                                Fecha/Hora hecho: <strong>{markerSelected.fechaHecho} {markerSelected.horaHecho.hours}:{markerSelected.horaHecho.minutes}</strong><br />
                             </Alert>
                         </div>
                     </div>

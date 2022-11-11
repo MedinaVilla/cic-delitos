@@ -6,29 +6,28 @@ import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 
 
-export default function ChartC(props){
-    return(
-      <Card elevation={3}>
-        <CardHeader
-          title={props.title}
-          subheader={props.info}
-        ></CardHeader>
-        <CardContent>
-          
-          <Chart
-            type={props.type}
-            data={props.state}
-            options={{
-              title:{
-                display:false,
+export default function ChartC(props) {
+  return (
+    <Card elevation={3}>
+      <CardHeader
+        title={props.title}
+        subheader={props.info}
+      ></CardHeader>
+      <CardContent>
+
+        <Chart
+          type={props.type}
+          data={props.state}
+          options={{
+            plugins: {
+              legend: {
+                display: true
               },
-              legend:{
-                display:true,
-                position:'right'
-              }
-            }}
-          />
-        </CardContent>
-      </Card>
-    );
+
+            }
+          }}
+        />
+      </CardContent>
+    </Card>
+  );
 }

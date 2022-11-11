@@ -8,6 +8,11 @@ import { iconMarker } from '../MarkerIcon';
 
 import axios from "axios";
 
+import Regla1 from "./../../../assets/Regla_1.PNG";
+import Regla2 from "./../../../assets/Regla_2.PNG";
+import Regla3 from "./../../../assets/Regla_3.PNG";
+import Regla4 from "./../../../assets/Regla_4.PNG";
+
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 require("leaflet.markercluster/dist/MarkerCluster.css");
@@ -159,11 +164,13 @@ const AsociationMap = ({ markerType }) => {
                                         Reglas de Asociación  {markerSelected ? markerSelected.idCarpeta : ""}
                                     </Typography>
                                 </Box>
-                                <Box style={{ padding: "18px", border: "1px solid #E7E7E7" }}>
-                                    Cras mattis consectetur purus sit amet fermentum.
-                                    Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                                    Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                    Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
+                                <Box style={{  border: "1px solid #E7E7E7" }}>
+                                    <div className={styles.containerScroll}>
+                                        <img src={Regla1} className={styles.regla} alt="regla1" />
+                                        <img src={Regla2} className={styles.regla} alt="regla2" />
+                                        <img src={Regla3} className={styles.regla} alt="regla3" />
+                                        <img src={Regla4} className={styles.regla} alt="regla4" />
+                                    </div>
                                 </Box>
                             </Container>
                         </div>
