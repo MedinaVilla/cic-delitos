@@ -40,6 +40,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+Delitos_Violentos_Prep_Rango.csv
+Delitos_Genero_Prep_Rango.csv
+Delitos_Genero_Procesado.json
+Delitos_Violentos_Procesado.json
 # TypeScript v1 declaration files
 typings/
 

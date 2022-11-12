@@ -3,7 +3,10 @@ const fs = require('fs');
 
 let results = [];
 
-fs.createReadStream('./input/Delitos_Violentos_Preproceso.csv')
+let pathDelitosGeneroPreprocesadoInput = './input/Delitos_Violentos_Prep_Rango.csv';
+let pathDelitosGeneroPreprocesadoOutput = 'output/Delitos_Violentos_Procesado.json';
+
+fs.createReadStream(pathDelitosGeneroPreprocesadoInput)
     .pipe(csv())
     .on('data', (row) => {
         console.log(row);
@@ -13,7 +16,7 @@ fs.createReadStream('./input/Delitos_Violentos_Preproceso.csv')
     })
     .on('end', () => {
         console.log('CSV file successfully processed');
-        fs.writeFileSync("output/Delitos_Violentos_Preproceso.json", JSON.stringify(results), 'utf8', function (err) {
+        fs.writeFileSync(pathDelitosGeneroPreprocesadoOutput, JSON.stringify(results), 'utf8', function (err) {
             if (err) {
                 console.log(err);
             }

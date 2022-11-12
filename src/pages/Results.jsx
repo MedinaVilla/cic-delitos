@@ -1,39 +1,32 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
 // import Graph from "./../assets/graph.PNG";
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import AsociationMap from '../components/cluster/asociationMap/AsociationMap';
-
-import dataCSVG from "./../data/Delitos_Genero_Preproceso.json";
-import dataCSVV from "./../data/Delitos_Violentos_Preproceso.json";
-import { Box } from '@mui/system';
-import { Chart } from 'react-chartjs-2';
 
 const Results = () => {
 
-    let chart = {
-        title:"Clasificación de Delitos",
-        info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-        type: "doughnut",
-        state: {
-            labels: ["Delitos de Género", "Delitos Violentos", "Delitos Comunes"],
-            datasets: [
-                {
-                    label: "Rainfall",
-                    backgroundColor: ["#1C658C", "#398AB9", "#702963", ],
-                    borderColor: "#FFFFFF",
-                    borderWidth: 2,
-                    data: [65, 59, 80]
-                }
-            ]
-        }
-    }
+    // let chart = {
+    //     title:"Clasificación de Delitos",
+    //     info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+    //     type: "doughnut",
+    //     state: {
+    //         labels: ["Delitos de Género", "Delitos Violentos", "Delitos Comunes"],
+    //         datasets: [
+    //             {
+    //                 label: "Rainfall",
+    //                 backgroundColor: ["#1C658C", "#398AB9", "#702963", ],
+    //                 borderColor: "#FFFFFF",
+    //                 borderWidth: 2,
+    //                 data: [65, 59, 80]
+    //             }
+    //         ]
+    //     }
+    // }
 
     return (
         <div style={{ padding: "28px", }}>
-            <Grid container alignItems="center" >
+            {/* <Grid container alignItems="center" >
                 <Grid item xs={12} md={7} lg={8} style={{ textAlign: "center", display:"flex" }} justifyContent="center"  >
-                    {/* <img style={{ width: "100%", maxWidth: "600px" }} src={Graph} alt="graph" /> */}
                     <div style={{ width: "450px"}}>
                         <Chart
                             type={chart.type}
@@ -55,7 +48,6 @@ const Results = () => {
                                             padding:18
                                         },
                                         position:"bottom"
-                                        // align:"start"
                                     },
                                     
                                 },
@@ -78,8 +70,8 @@ const Results = () => {
                         </Box>
                     </Container>
                 </Grid>
-            </Grid>
-            <br />
+            </Grid> */}
+            {/* <br /> */}
             <div >
                 <Typography sx={{ fontSize: 24 }} color="black" >
                     Delitos de Género

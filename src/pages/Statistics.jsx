@@ -7,65 +7,11 @@ import axios from 'axios';
 
 
 const Statistics = () => {
-    const [delitosDelegacion, setDelitosDelegacion] = useState();
+    const [delitosGDelegacion, setDelitosGDelegacion] = useState();
+    const [delitosVDelegacion, setDelitosVDelegacion] = useState();
+
     const [delitosHour, setDelitosHour] = useState();
     const [delitosEdad, setDelitosEdad] = useState();
-
-
-    const [charts, setCharts] = useState([
-        {
-            title: "Delitos por delegación",
-            info: "Cadencia de delitos por delegación en la Ciudad de México",
-            type: "bar",
-            state: {
-                labels: ["January", "February", "March", "April", "May"],
-                datasets: [
-                    {
-                        label: "Rainfall",
-                        backgroundColor: "#1687A7",
-                        borderColor: "#000000",
-                        borderWidth: 2,
-                        data: [65, 34, 34, 34, 34]
-                    },
-
-                ]
-            }
-        },
-        {
-            title: "Grafica 4",
-            info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            type: "doughnut",
-            state: {
-                labels: ["January", "February", "March", "April", "May"],
-                datasets: [
-                    {
-                        label: "Rainfall",
-                        backgroundColor: ["#1C658C", "#398AB9", "#D8D2CB", "#CBAF87", "#E7DEC8"],
-                        borderColor: "#000000",
-                        borderWidth: 2,
-                        data: [65, 59, 80, 81, 56]
-                    }
-                ]
-            }
-        },
-        {
-            title: "Grafica 5",
-            info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            type: "pie",
-            state: {
-                labels: ["January", "February", "March", "April", "May"],
-                datasets: [
-                    {
-                        label: "Rainfall",
-                        backgroundColor: ["#1C658C", "#398AB9", "#D8D2CB", "#CBAF87", "#E7DEC8"],
-                        borderColor: "#000000",
-                        borderWidth: 2,
-                        data: [65, 59, 80, 81, 56]
-                    }
-                ]
-            }
-        },
-    ])
 
     useEffect(() => {
         async function fetchData() {
@@ -75,10 +21,11 @@ const Statistics = () => {
                 response.data.map((delito) => {
                     labels.push(delito.alcaldiaHecho);
                     data.push(parseInt(delito.count));
+                    return true;
                 })
-                setDelitosDelegacion({
-                    title: "Delitos por delegación",
-                    info: "Cadencia de delitos por delegación en la Ciudad de México",
+                setDelitosGDelegacion({
+                    title: "Delitos de género por delegación",
+                    info: "Número de delitos de género por delegación en la Ciudad de México",
                     type: "bar",
                     state: {
                         labels: labels,
@@ -86,7 +33,7 @@ const Statistics = () => {
                             {
                                 label: "Delitos cometidos",
                                 backgroundColor: "#800040",
-                                borderColor: "#000000",
+                                borderColor: "#671D1D",
                                 borderWidth: 2,
                                 data: data
                             }
@@ -95,9 +42,6 @@ const Statistics = () => {
                     },
 
                 });
-
-
-
             }).catch((error) => {
                 console.log(error)
             })
@@ -111,13 +55,15 @@ const Statistics = () => {
 
                 let labels = [];
                 let data = [];
+                console.log(response.data)
                 response.data.map((delito) => {
-                    labels.push(delito.rangoHora);
+                    labels.push(delito.horaHecho);
                     data.push(parseInt(delito.count));
+                    return true;
                 })
                 setDelitosHour({
-                    title: "Delitos por hora",
-                    info: "Delitos cometidos por rango de horas (24 hrs) en la Ciudad de México",
+                    title: "Delitos de género por hora",
+                    info: "Delitos de género cometidos por rango de hora en la Ciudad de México",
                     type: "doughnut",
                     state: {
                         labels: labels,
@@ -163,12 +109,13 @@ const Statistics = () => {
                 let labels = [];
                 let data = [];
                 response.data.map((delito) => {
-                    labels.push(delito.rangoEdad);
+                    labels.push(delito.edad);
                     data.push(parseInt(delito.count));
+                    return true;
                 })
                 setDelitosEdad({
-                    title: "Delitos por edad",
-                    info: "Delitos cometidos por rango de edades en años en la Ciudad de México ",
+                    title: "Delitos de género por edad",
+                    info: "Delitos de género cometidos por rango de edad en años en la Ciudad de México ",
                     type: "doughnut",
                     state: {
                         labels: labels,
@@ -206,12 +153,49 @@ const Statistics = () => {
         fetchData();
     }, [])
 
+    useEffect(() => {
+        async function fetchData() {
+            axios.get("http://localhost:8081/delitos_genero/graph4").then((response) => {
+                let labels = [];
+                let data = [];
+                response.data.map((delito) => {
+                    labels.push(delito.alcaldiaHecho);
+                    data.push(parseInt(delito.count));
+                    return true;
+                })
+                setDelitosVDelegacion({
+                    title: "Delitos violentos por delegación",
+                    info: "Número de delitos violentos por delegación en la Ciudad de México",
+                    type: "bar",
+                    state: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Delitos cometidos",
+                                backgroundColor: "#FFC000",
+                                borderColor: "#FFD700",
+                                borderWidth: 2,
+                                data: data
+                            }
+                        ],
 
+                    },
+
+                });
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
+        fetchData();
+    }, [])
     return (
         <Container sx={{ m: "2rem" }}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={12} md={12}>
-                    {delitosDelegacion && <ChartC title={delitosDelegacion.title} info={delitosDelegacion.info} state={delitosDelegacion.state} type={delitosDelegacion.type}></ChartC>}
+                    {delitosGDelegacion && <ChartC title={delitosGDelegacion.title} info={delitosGDelegacion.info} state={delitosGDelegacion.state} type={delitosGDelegacion.type}></ChartC>}
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                    {delitosVDelegacion && <ChartC title={delitosVDelegacion.title} info={delitosVDelegacion.info} state={delitosVDelegacion.state} type={delitosVDelegacion.type}></ChartC>}
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                     {delitosHour && <ChartC title={delitosHour.title} info={delitosHour.info} state={delitosHour.state} type={delitosHour.type}></ChartC>}

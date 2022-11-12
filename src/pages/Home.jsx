@@ -22,7 +22,7 @@ const Home = () => {
     const mapRef = useRef(null);
     const [zoom] = useState(11);
 
-    const [showAside, setShowAside] = useState(false);
+    const [showAside] = useState(false);
     const [markers, setMarkers] = useState([]);
     const [markerSelected, setMarkerSelected] = useState();
     const [transitionOn, setTransitionOn] = useState(false);
@@ -103,6 +103,7 @@ const Home = () => {
                     let marker = L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], { icon: iconMarker })
                     marker.data = point.properties.data
                     marker.addTo(markers);
+                    return true;
                 })
 
 
@@ -166,9 +167,10 @@ const Home = () => {
                     markerSelected && <div>
                         <div className={styles.container}>
                             <Alert severity="error" icon={false}>
-                                Delito: <strong>{markerSelected.delito}</strong> <br />
-                                Edad: <strong>{markerSelected.edad}</strong><br />
-                                Fecha/Hora hecho: <strong>{markerSelected.fechaHecho} {markerSelected.horaHecho.hours}:{markerSelected.horaHecho.minutes}</strong><br />
+                                <h3>Delito: <strong>{markerSelected.delito}</strong> </h3>
+                                Edad: <strong>{markerSelected.edad}</strong><br /><br />
+                                Hora del delito: <strong>{markerSelected.horaHecho}</strong><br /><br />
+                                Fecha del delito: <strong>{markerSelected.fechaHecho} </strong><br />
                             </Alert>
                         </div>
                     </div>

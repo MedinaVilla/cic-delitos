@@ -12,6 +12,15 @@ import Regla1 from "./../../../assets/Regla_1.PNG";
 import Regla2 from "./../../../assets/Regla_2.PNG";
 import Regla3 from "./../../../assets/Regla_3.PNG";
 import Regla4 from "./../../../assets/Regla_4.PNG";
+import Regla5 from "./../../../assets/Regla_5.PNG";
+import Regla6 from "./../../../assets/Regla_6.PNG";
+import Regla7 from "./../../../assets/Regla_7.PNG";
+import Regla8 from "./../../../assets/Regla_8.PNG";
+import Regla9 from "./../../../assets/Regla_9.PNG";
+import Regla10 from "./../../../assets/Regla_10.PNG";
+import Regla11 from "./../../../assets/Regla_11.PNG";
+import Regla12 from "./../../../assets/Regla_12.PNG";
+import Regla13 from "./../../../assets/Regla_13.PNG";
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
@@ -30,7 +39,7 @@ const AsociationMap = ({ markerType }) => {
 
     const [transitionOn, setTransitionOn] = useState(false);
 
-    const [showAside, setShowAside] = useState(true);
+    const [showAside] = useState(true);
 
     const [loading, setLoading] = useState(true);
     const [loadingData, setLoadingData] = useState(true);
@@ -50,7 +59,7 @@ const AsociationMap = ({ markerType }) => {
             })
         }
         fetchData();
-    }, [])
+    }, [markerType])
 
 
     /* Listeners que siempre estara pendiente del cualquier cambio del tamaño del mapa para hacer un RESIZE*/
@@ -91,8 +100,6 @@ const AsociationMap = ({ markerType }) => {
         } else return {}
     });
 
-
-
     const renderCluster = (map) => {
         setTimeout(
             () => {
@@ -108,6 +115,7 @@ const AsociationMap = ({ markerType }) => {
                     let marker = L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], { icon: iconMarker })
                     marker.data = point.properties.data
                     marker.addTo(markers);
+                    return true;
                 })
 
 
@@ -161,15 +169,25 @@ const AsociationMap = ({ markerType }) => {
                             <Container >
                                 <Box style={{ backgroundColor: "#0E8DD4", color: "white", padding: "18px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} >
                                     <Typography sx={{ fontSize: 18 }} color="white" >
-                                        Reglas de Asociación  {markerSelected ? markerSelected.idCarpeta : ""}
+                                        Reglas de Asociación  <br/> <strong>{markerSelected ? '"' + markerSelected.delito + '"' : ""}</strong>
                                     </Typography>
                                 </Box>
-                                <Box style={{  border: "1px solid #E7E7E7" }}>
+                                <Box style={{ border: "1px solid #E7E7E7" }}>
                                     <div className={styles.containerScroll}>
                                         <img src={Regla1} className={styles.regla} alt="regla1" />
                                         <img src={Regla2} className={styles.regla} alt="regla2" />
                                         <img src={Regla3} className={styles.regla} alt="regla3" />
                                         <img src={Regla4} className={styles.regla} alt="regla4" />
+                                        <img src={Regla5} className={styles.regla} alt="regla5" />
+                                        <img src={Regla6} className={styles.regla} alt="regla6" />
+                                        <img src={Regla7} className={styles.regla} alt="regla7" />
+                                        <img src={Regla8} className={styles.regla} alt="regla8" />
+                                        <img src={Regla9} className={styles.regla} alt="regla9" />
+                                        <img src={Regla10} className={styles.regla} alt="regla10" />
+                                        <img src={Regla11} className={styles.regla} alt="regla11" />
+                                        <img src={Regla12} className={styles.regla} alt="regla12" />
+                                        <img src={Regla13} className={styles.regla} alt="regla13" />
+
                                     </div>
                                 </Box>
                             </Container>
