@@ -21,6 +21,7 @@ import Regla10 from "./../../../assets/Regla_10.PNG";
 import Regla11 from "./../../../assets/Regla_11.PNG";
 import Regla12 from "./../../../assets/Regla_12.PNG";
 import Regla13 from "./../../../assets/Regla_13.PNG";
+import Regla14 from "./../../../assets/Regla_14.PNG";
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
@@ -83,6 +84,7 @@ const AsociationMap = ({ markerType }) => {
         }
     }, [loading])
 
+    console.log(markerType)
     /* Convertimos los marcadores en un formato legible para el mapa*/
     const points = markers.map((data, id) => {
         if (!isNaN(data.longitud) && !isNaN(data.latitud)) {
@@ -169,11 +171,11 @@ const AsociationMap = ({ markerType }) => {
                             <Container >
                                 <Box style={{ backgroundColor: "#0E8DD4", color: "white", padding: "18px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} >
                                     <Typography sx={{ fontSize: 18 }} color="white" >
-                                        Reglas de Asociación  <br/> <strong>{markerSelected ? '"' + markerSelected.delito + '"' : ""}</strong>
+                                        Reglas de Asociación  <br /> <strong>{markerSelected ? '"' + markerSelected.delito + '"' : ""}</strong>
                                     </Typography>
                                 </Box>
                                 <Box style={{ border: "1px solid #E7E7E7" }}>
-                                    <div className={styles.containerScroll}>
+                                    {markerType === "delitos_genero" ? <div className={styles.containerScroll}>
                                         <img src={Regla1} className={styles.regla} alt="regla1" />
                                         <img src={Regla2} className={styles.regla} alt="regla2" />
                                         <img src={Regla3} className={styles.regla} alt="regla3" />
@@ -187,8 +189,10 @@ const AsociationMap = ({ markerType }) => {
                                         <img src={Regla11} className={styles.regla} alt="regla11" />
                                         <img src={Regla12} className={styles.regla} alt="regla12" />
                                         <img src={Regla13} className={styles.regla} alt="regla13" />
-
+                                    </div> : <div>
+                                        <img src={Regla14} className={styles.regla} alt="regla14" />
                                     </div>
+                                    }
                                 </Box>
                             </Container>
                         </div>

@@ -23,6 +23,7 @@ if (Connection.db) {
                     console.log("idCarpeta: " + delito.idCarpeta + " NOTIFICAR AL PROGRAMADOR")
                     process.exit();
                 })
+            return true;
         })
     }).catch((error) => {
         console.log(error)
@@ -46,6 +47,7 @@ if (Connection.db) {
                     console.log("idCarpeta: " + delito.idCarpeta + " NOTIFICAR AL PROGRAMADOR")
                     process.exit();
                 })
+            return true;
         })
     }).catch((error) => {
         console.log(error)
